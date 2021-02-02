@@ -19,6 +19,8 @@ env:
   CI_DEPLOY_PASSWORD: ${{ secrets.CI_DEPLOY_PASSWORD }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
 on: [push, pull_request]
   
@@ -58,6 +60,6 @@ jobs:
     - name: Build + Test
       if: (github.repository != 'finos/legend-sdlc') || (github.ref != 'refs/heads/master')
       run: mvn install javadoc:javadoc
-    - name: Build + Test + Sonar + Maven Deploy
+    - name: Build + Test + Sonar + Maven Deploy + Docker release
       if: (github.repository == 'finos/legend-sdlc') && (github.ref == 'refs/heads/master')
-      run: mvn javadoc:javadoc deploy -Psonar
+      run: mvn javadoc:javadoc deploy -Psonar,docker
